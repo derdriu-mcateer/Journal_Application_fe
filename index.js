@@ -1,25 +1,45 @@
+// Import necessary modules
 import express from 'express';
-import mongoose from 'mongoose'
+// const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
+
+
+// Define initial data for categories and entries
 const categories = ['Food', 'Gaming', 'Coding', 'Other'];
 
 const entries = [
     { category: 'Food', content: 'Pizza is yummy!' },
     { category: 'Coding', content: 'Coding is fun!' },
     { category: 'Gaming', content: 'Skyrim is for the Nords' }
-]
+];
 
-mongoose.connect()
-    .then(connection => console.log(connection.connection.readyState === 1 ? 'MongoDB connected!' : 'MongoDB failed to connect'))
-    .catch(err => console.log(err))
+// Connect to MongoDB
+async function dbConnect() {
+    try{
+        await mongoose.connect('ADD DB_URI HERE')
+        console.log(`MongoDB connected!`)
+    } catch(error){
+        console.log(`MongoDb failed to connect! Error:${error}`);
+    }
+}
+dbConnect()
 
 
+// Define the schema for entries in MongoDB
 const entriesSchema = new mongoose.Schema({
-    category : String,
-    content: String,
-})
+    category: {
+        type: String,
+        required: true
+    },
+    content: {
+        type: String,
+        required: true
+    },
+});
 
-const EntryModel = mongoose.model('Entry', entriesSchema)
+// Create a model based on the schema
+const EntryModel = mongoose.model('Entry', entriesSchema);
 
 // Create an Express application
 const app = express();
@@ -54,38 +74,22 @@ app.get('/entries/:id', (req, res) => {
     }
 });
 
-
 // Define a route for the '/entries' endpoint with HTTP POST method
 app.post('/entries', async (req, res) => {
     try {
-    // Log the request body to the console
-    // console.log(req.body);
-    // TODO: Validate the request body
+        // Use the EntryModel to create a new entry in MongoDB
+        const insertedEntry = await EntryModel.create(req.body);
 
-    // Create a new entry object and push it to the entries array
-    // entries.push(req.body);
-
-    const insertedEntry = await EntryModel.create(req.body)
-
-    // Respond with HTTP status 201 (Created) and the created entry
-    res.status(201).send(insertedEntry);
+        // Respond with HTTP status 201 (Created) and the created entry
+        res.status(201).send(insertedEntry);
 
     } catch (err) {
-        res.status(400).send({error : err.message})
+        // If an error occurs during the creation of the entry, respond with HTTP status 400 (Bad Request) and an error message
+        res.status(400).send({ error: err.message });
     }
-
 });
 
 // Start the Express application on port 3001
 app.listen(3001);
 
 
-
-// app.get('/example', (req, res) => {
-//     // Access information from the request object (req)
-//     const clientIP = req.ip;
-//     const userAgent = req.get('User-Agent');
-
-//     // Send a response back to the client using the response object (res)
-//     res.status(200).send(`Hello! Your IP is ${clientIP} and you're using ${userAgent}`);
-// });       testing 123 
