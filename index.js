@@ -1,4 +1,5 @@
 import express from 'express';
+import mongoose from 'mongoose'
 
 const categories = ['Food', 'Gaming', 'Coding', 'Other'];
 
@@ -7,6 +8,18 @@ const entries = [
     { category: 'Coding', content: 'Coding is fun!' },
     { category: 'Gaming', content: 'Skyrim is for the Nords' }
 ]
+
+mongoose.connect()
+    .then(connection => console.log(connection.connection.readyState === 1 ? 'MongoDB connected!' : 'MongoDB failed to connect'))
+    .catch(err => console.log(err))
+
+
+const entriesSchema = new mongoose.Schema({
+    category : String,
+    content: String,
+})
+
+const EntryModel = mongoose.model('Entry', entriesSchema)
 
 // Create an Express application
 const app = express();
@@ -43,16 +56,24 @@ app.get('/entries/:id', (req, res) => {
 
 
 // Define a route for the '/entries' endpoint with HTTP POST method
-app.post('/entries', (req, res) => {
+app.post('/entries', async (req, res) => {
+    try {
     // Log the request body to the console
-    console.log(req.body);
+    // console.log(req.body);
     // TODO: Validate the request body
 
     // Create a new entry object and push it to the entries array
-    entries.push(req.body);
+    // entries.push(req.body);
+
+    const insertedEntry = await EntryModel.create(req.body)
 
     // Respond with HTTP status 201 (Created) and the created entry
-    res.status(201).send(entries[entries.length - 1]);
+    res.status(201).send(insertedEntry);
+
+    } catch (err) {
+        res.status(400).send({error : err.message})
+    }
+
 });
 
 // Start the Express application on port 3001
