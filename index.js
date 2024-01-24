@@ -1,8 +1,5 @@
 // Import necessary modules
 import express from 'express';
-// const mongoose = require('mongoose');
-import mongoose from 'mongoose';
-
 
 
 // Define initial data for categories and entries
@@ -14,32 +11,7 @@ const entries = [
     { category: 'Gaming', content: 'Skyrim is for the Nords' }
 ];
 
-// Connect to MongoDB
-async function dbConnect() {
-    try{
-        await mongoose.connect('ADD DB_URI HERE')
-        console.log(`MongoDB connected!`)
-    } catch(error){
-        console.log(`MongoDb failed to connect! Error:${error}`);
-    }
-}
-dbConnect()
 
-
-// Define the schema for entries in MongoDB
-const entriesSchema = new mongoose.Schema({
-    category: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-});
-
-// Create a model based on the schema
-const EntryModel = mongoose.model('Entry', entriesSchema);
 
 // Create an Express application
 const app = express();
@@ -54,7 +26,10 @@ app.get('/', (req, res) => res.send({ info: 'Journal API' }));
 app.get('/categories', (req, res) => res.send(categories));
 
 // Define a route for the '/entries' endpoint that sends the entries array
-app.get('/entries', (req, res) => res.send(entries));
+app.get('/entries', async(req, res) => {
+    res.send(await EntryModel.find())
+});
+
 
 // Define a route for the '/entries/:id' endpoint using HTTP GET method
 app.get('/entries/:id', (req, res) => {
