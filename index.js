@@ -1,15 +1,10 @@
 // Import necessary modules
 import express from 'express';
-
+import {EntryModel, CategoryModel} from './db.js'
 
 // Define initial data for categories and entries
 const categories = ['Food', 'Gaming', 'Coding', 'Other'];
 
-const entries = [
-    { category: 'Food', content: 'Pizza is yummy!' },
-    { category: 'Coding', content: 'Coding is fun!' },
-    { category: 'Gaming', content: 'Skyrim is for the Nords' }
-];
 
 
 
@@ -23,7 +18,7 @@ app.use(express.json());
 app.get('/', (req, res) => res.send({ info: 'Journal API' }));
 
 // Define a route for the '/categories' endpoint that sends the categories array
-app.get('/categories', (req, res) => res.send(categories));
+app.get('/categories', async (req, res) => res.send(await CategoryModel.find()));
 
 // Define a route for the '/entries' endpoint that sends the entries array
 app.get('/entries', async(req, res) => {
@@ -32,13 +27,11 @@ app.get('/entries', async(req, res) => {
 
 
 // Define a route for the '/entries/:id' endpoint using HTTP GET method
-app.get('/entries/:id', (req, res) => {
-    // Extract the 'id' parameter from the request's URL parameters
-    const entryId = req.params.id;
-
+app.get('/entries/:id', async(req, res) => {
     // Retrieve the entry from the 'entries' array based on the extracted ID
-    const entry = entries[entryId - 1];
-
+    const entry = await EntryModel.findOne({_id : req.params.id});
+//    const entry = await EntryModel.findById(req.params.id);
+    console.log(entry)
     // Check if an entry was found based on the provided ID
     if (entry) {
         // If an entry is found, send it as a JSON response
@@ -64,6 +57,31 @@ app.post('/entries', async (req, res) => {
     }
 });
 
+app.put('/entries/:id', async(req, res) => {
+    try {
+        const updatedEntry = await EntryModel.findByIdAndUpdate(req.params.id, req.body, { new: true})
+        if(updatedEntry){
+            res.send(updatedEntry)
+        } else {
+            res.status(500).send({ error: 'Entry not found'})
+        }
+    } catch (error) {
+        res.status(400).send({error: error.message})
+    }
+});
+
+app.delete('/entries/:id', async(req, res) => {
+    try {
+        const deletedEntry = await EntryModel.findByIdAndUpdate(req.params.id)
+        if(deletedEntry){
+            res.sendStatus(204)
+        } else {
+            res.status(500).send({ error: 'Entry not found'})
+        }
+    } catch (error) {
+        res.status(400).send({error: error.message})
+    }
+});
 // Start the Express application on port 3001
 app.listen(3001);
 

@@ -15,7 +15,11 @@ async function dbConnect() {
 }
 dbConnect()
 
-process.on('SIGTERM',  () => mongoose.disconnect())
+const closeConnection = () => {
+    console.log('Mongoose disconnecting ...')
+    mongoose.disconnect()
+}
+
 
 // Define the schema for entries in MongoDB
 const entriesSchema = new mongoose.Schema({
@@ -32,4 +36,19 @@ const entriesSchema = new mongoose.Schema({
 // Create a model based on the schema
 const EntryModel = mongoose.model('Entry', entriesSchema);
 
-export {EntryModel}
+
+
+// Define the schema for entries in MongoDB
+const categoriesSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+});
+
+// Create a model based on the schema
+const CategoryModel = mongoose.model('Category', categoriesSchema);
+
+
+
+export {closeConnection, EntryModel,CategoryModel}
