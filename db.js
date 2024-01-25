@@ -1,54 +1,32 @@
-import mongoose from 'mongoose';
-import dotenv from 'dotenv';
+import mongoose from 'mongoose'
+import dotenv from 'dotenv'
 
-// Load environment variables from .env file
-dotenv.config();
+dotenv.config()
 
-// Connect to MongoDB
-async function dbConnect() {
-    try{
-        await mongoose.connect(process.env.DB_URI);
-        console.log(`MongoDB connected!`)
-    } catch(error){
-        console.log(`MongoDb failed to connect! Error:${error}`);
-    }
+try {
+    const m = await mongoose.connect(process.env.DB_URI)
+    console.log(m.connection.readyState === 1 ? 'MongoDB connected!' : 'MongoDB failed to connect')
 }
-dbConnect()
+catch (err) {
+    console.error(err)
+}
 
 const closeConnection = () => {
     console.log('Mongoose disconnecting ...')
     mongoose.disconnect()
 }
 
-
-// Define the schema for entries in MongoDB
-const entriesSchema = new mongoose.Schema({
-    category: {
-        type: String,
-        required: true
-    },
-    content: {
-        type: String,
-        required: true
-    },
-});
-
-// Create a model based on the schema
-const EntryModel = mongoose.model('Entry', entriesSchema);
-
-
-
-// Define the schema for entries in MongoDB
 const categoriesSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-});
+    name: { type: String, required: true }
+})
 
-// Create a model based on the schema
-const CategoryModel = mongoose.model('Category', categoriesSchema);
+const CategoryModel = mongoose.model('Category', categoriesSchema)
 
+const entriesSchema = new mongoose.Schema({
+    category: { type: mongoose.ObjectId, ref: 'Category' },
+    content: { type: String, required: true }
+})
 
+const EntryModel = mongoose.model('Entry', entriesSchema)
 
-export {closeConnection, EntryModel,CategoryModel}
+export { closeConnection, EntryModel, CategoryModel }
