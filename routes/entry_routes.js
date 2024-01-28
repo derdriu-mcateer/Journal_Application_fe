@@ -3,8 +3,10 @@ import { EntryModel } from "../db.js"
 
 const router = Router()
 
+//Get all entries 
 router.get('/', async (req, res) => res.send(await EntryModel.find().populate('category')))
 
+// Get entry by id
 router.get('/:id', async (req, res) => {
     const entry = await EntryModel.findById(req.params.id).populate('category')
     if (entry) {
@@ -14,6 +16,7 @@ router.get('/:id', async (req, res) => {
     }
 })
 
+// Create a new entry 
 router.post('/', async (req, res) => {
     try {
         const insertedEntry = await EntryModel.create(req.body)
@@ -24,6 +27,7 @@ router.post('/', async (req, res) => {
     }
 })
 
+ //Update an entry
 router.put('/:id', async (req, res) => {
     try {
         const updatedEntry = await EntryModel.findByIdAndUpdate(req.params.id, req.body, { new: true })
@@ -38,6 +42,7 @@ router.put('/:id', async (req, res) => {
     }
 })
 
+//Delete an entry 
 router.delete('/:id', async (req, res) => {
     try {
         const deletedEntry = await EntryModel.findByIdAndDelete(req.params.id)
