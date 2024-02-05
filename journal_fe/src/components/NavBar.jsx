@@ -1,41 +1,56 @@
-import React, { useRef } from "react"
-import { Link } from "react-router-dom"
+import { useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 const NavBar = () => {
-  const navBarRef = useRef()
+  const navBarRef = useRef();
 
-  function toggleHamburger(evt) {
-    evt.target.classList.toggle('is-active')
-    navBarRef.current.classList.toggle('is-active')
+  function toggleHamburger() {
+    // Toggle the 'is-active' class on the button
+    const button = document.querySelector('.navbar-toggler');
+    button.classList.toggle('is-active');
+
+    // Toggle the 'is-active' class on the navbar
+    navBarRef.current.classList.toggle('is-active');
   }
 
   return (
-        <nav className="navbar is-dark" role="navigation" aria-label="main navigation">
-            <div className="navbar-brand">
-                <h1>Journal</h1>
+    <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+      <div className="container-fluid">
+        <h4 className="logo">My Journal</h4>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+          onClick={toggleHamburger}
+        >
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" ref={navBarRef} id="navbarSupportedContent">
+          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <Link to="/" className="nav-link active" aria-current="page" >
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/category" className="nav-link active" aria-current="page">
+                Select Cateogry
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/entry/new" className="nav-link active" aria-current="page" >
+                New Entry
+              </Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
-                <a role="button" onClick={toggleHamburger} className="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                    <span aria-hidden="true"></span>
-                </a>
-            </div>
-
-            <div id="navbarBasicExample" ref={navBarRef} className="navbar-menu">
-                <div className="navbar-start">
-                    <Link to="/"className="navbar-item">Home</Link>
-
-                    <Link to="/category"className="navbar-item">Select Category</Link>
-
-                    <div className="navbar-item has-dropdown is-hoverable">
-                        <Link to="/entry/new"className="navbar-link">New Entry</Link>
-
-                    </div>
-                </div>
-
-            </div>
-        </nav>
-    )
-}
-
-export default NavBar
+export default NavBar;
