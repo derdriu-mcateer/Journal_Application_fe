@@ -16,7 +16,10 @@ const NavBar = () => {
   return (
     <nav className="navbar navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
       <div className="container-fluid">
-        <h4 className="logo">My Journal</h4>
+        <Link to="/">
+            <h4 className="logo">My Journal</h4>
+        </Link>
+        
         <button
           className="navbar-toggler"
           type="button"
@@ -38,12 +41,7 @@ const NavBar = () => {
             </li>
             <li className="nav-item">
               <Link to="/category" className="nav-link active" aria-current="page">
-                Select Cateogry
-              </Link>
-            </li>
-            <li className="nav-item">
-              <Link to="/entry/new" className="nav-link active" aria-current="page" >
-                New Entry
+                Create new Entry
               </Link>
             </li>
           </ul>
