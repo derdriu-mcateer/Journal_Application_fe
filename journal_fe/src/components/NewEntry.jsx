@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 
 const NewEntry = ({ categories, addEntry}) => {
   const { cat_id } = useParams()
@@ -7,7 +7,7 @@ const NewEntry = ({ categories, addEntry}) => {
 
   function createEntry(e) {
     e.preventDefault()
-    addEntry(cat_id, inputValue)
+    addEntry(categories[cat_id], inputValue)
     setInputValue('')
 
   }
@@ -24,6 +24,9 @@ const NewEntry = ({ categories, addEntry}) => {
 
         </textarea>
         <button type="submit" className="btn btn-info" id="entry-button"> Submit</button>
+        <button type="submit" className="btn btn-info m-4"> 
+          <Link to="/category"> Go Back</Link>
+        </button>
       </form>
     </div>
   )

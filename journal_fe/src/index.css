@@ -1,7 +1,13 @@
 @import "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css";
-
+body{
+    background-color: lightblue;
+}
 .logo{
-    color: lightgreen
+    color: white;
+}
+
+a:-webkit-any-link{
+    text-decoration: none;
 }
 
 

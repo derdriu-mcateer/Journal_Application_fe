@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Entry accessed from ShowEntryWrapper function in App
 const ShowEntry = ({ entry }) => {
     return entry ? (
         <>
