@@ -36,6 +36,17 @@ a:-webkit-any-link{
 }
 
 #entry-card{
-    max-width: 400px;
+    width: 400px;
     margin: 20px;
 }
+.category-image-container {
+    width: 300px; 
+    overflow: hidden; 
+  }
+  
+  .category-image {
+    width: 100%; 
+    height: auto; 
+    object-fit: cover; 
+  }
+  

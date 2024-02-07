@@ -1,7 +1,7 @@
 import React from 'react'
 
 // Entry accessed from ShowEntryWrapper function in App
-const ShowEntry = ({ entry }) => {
+const ShowEntry = ({ entry}) => {
     return entry ? (
         <>
             <div className="card text-bg-dark mb-3" id="entry-card">

@@ -22,6 +22,7 @@ function App() {
 
   // Function which takes cat_id and content as parameters 
   function addEntry(cat_id, content) {
+    const newId = entries.length
     // Key value pairs 
     const newEntry = {
       category: cat_id,
@@ -29,6 +30,8 @@ function App() {
     }
     // ...etnries leaves the previous array unchanged and adds the newEntry to the end of the array 
     setEntries([...entries, newEntry])
+
+    return newId
   }
 
 

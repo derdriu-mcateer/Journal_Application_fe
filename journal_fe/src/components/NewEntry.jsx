@@ -1,14 +1,16 @@
 import React, { useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 const NewEntry = ({ categories, addEntry}) => {
   const { cat_id } = useParams()
   const [inputValue, setInputValue] = useState('')
+  const nav = useNavigate()
 
   function createEntry(e) {
     e.preventDefault()
-    addEntry(categories[cat_id], inputValue)
+    const id = addEntry(categories[cat_id], inputValue)
     setInputValue('')
+    nav(`/entry/${id}`)
 
   }
 
