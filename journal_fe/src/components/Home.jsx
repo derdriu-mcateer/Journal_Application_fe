@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import CategoryImage from './image';
 
-const Home = ({ entries }) => {
+const Home = ({ entries}) => {
 
   return (
     <>
@@ -12,9 +12,9 @@ const Home = ({ entries }) => {
             <div className="card-header">Entry</div>
             <div className="card-body">
               <h5 className="card-title">{entry.content}</h5>
-              <p className="card-text">Posted in {entry.category}</p>
-              <CategoryImage category={entry.category} />
-              <Link to={`/entry/${index}`}>Veiw Entry</Link>
+              <p className="card-text">{entry.category.name}</p>
+              <CategoryImage category={entry.category.name} />
+              <Link to={`/entry/${index}`}>View Entry</Link>
             </div>
           </div>
         ))}

@@ -4,7 +4,7 @@
 import { BrowserRouter as Router, Routes, Route, Outlet, useParams } from 'react-router-dom'
 
 // Import useState which is a hook that allows functional components in React to manage state.
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // Import Components to be rendered 
 import Home from './Home'
@@ -17,20 +17,45 @@ import ShowEntry from './ShowEntry'
 function App() {
 
   // Hard coded categories and entries 
-  const [categories] = useState(['Food', 'Gaming', 'Coding', 'Other'])
-  const [entries, setEntries] = useState([{ category: 'Food', content: "Pizza" }])
+  const [categories, setCategories] = useState([])
+  const [entries, setEntries] = useState([])
+
+  
+
+
+  useEffect(() => {
+    fetch('http://localhost:3001/categories')
+    .then(res => res.json())
+    .then(data => setCategories(data))
+
+    fetch('http://localhost:3001/entries')
+    .then(res => res.json())
+    .then(data => setEntries(data))
+
+
+  }, [])
 
   // Function which takes cat_id and content as parameters 
-  function addEntry(cat_id, content) {
+  async function addEntry(cat_id, content) {
     const newId = entries.length
     // Key value pairs 
     const newEntry = {
-      category: cat_id,
+      category: categories[cat_id]._id,
       content: content
     }
-    // ...etnries leaves the previous array unchanged and adds the newEntry to the end of the array 
-    setEntries([...entries, newEntry])
+    // ...entries leaves the previous array unchanged and adds the newEntry to the end of the array 
+    
 
+    const res = await fetch('http://localhost:3001/entries', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newEntry)
+    })
+    const data = await res.json()
+    setEntries([...entries, data])
+    // 2. Add new entry to the entries list
     return newId
   }
 
@@ -54,7 +79,7 @@ function App() {
         <NavBar />
         <Routes>
           {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
-          <Route path="/" element={<Home entries={entries} />} />
+          <Route path="/" element={<Home entries={entries}/>} />
           {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
           <Route path="/category" element={<CategorySelection categories={categories} />} />
           <Route path="/entry" element={<Outlet />}>

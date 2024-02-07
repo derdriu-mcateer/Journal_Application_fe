@@ -9,7 +9,7 @@ const CategorySelection = ({categories}) => {
       <ul className="list-group list-group-horizontal">
         {categories.map((item, index) => (
           <li key={index} className="list-group-item list-group-item-info">
-            <Link to={`/entry/new/${index}`}>{item}</Link>
+            <Link to={`/entry/new/${index}`}>{item.name}</Link>
           </li>
         ))}
       </ul>

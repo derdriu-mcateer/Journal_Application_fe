@@ -6,9 +6,9 @@ const NewEntry = ({ categories, addEntry}) => {
   const [inputValue, setInputValue] = useState('')
   const nav = useNavigate()
 
-  function createEntry(e) {
+  async function createEntry(e) {
     e.preventDefault()
-    const id = addEntry(categories[cat_id], inputValue)
+    const id = await addEntry(cat_id, inputValue)
     setInputValue('')
     nav(`/entry/${id}`)
 
@@ -19,7 +19,7 @@ const NewEntry = ({ categories, addEntry}) => {
   return (
     <div className="newEntry-container">
       <h3>New Entry</h3>
-      <h4>Category: {categories[cat_id]}</h4>
+      <h4>Category: {categories[cat_id].name}</h4>
       <form onSubmit={createEntry}>
         <textarea className="form-control" id="exampleFormControlTextarea1" placeholder='Type your journal entry here'
           value={inputValue} onChange={e => setInputValue(e.target.value)}>
