@@ -12,3 +12,4 @@ function CategoryImage({ category }) {
 }
 
 export default CategoryImage;
+

@@ -6,6 +6,7 @@ const Home = ({ entries}) => {
 
   return (
     <>
+    <h3>Journal Entries</h3>
       <div className="row justify-content-center">
         {entries.map((entry, index) => (
           <div className="card text-bg-dark col-md-4 mb-3" id="entry-card">

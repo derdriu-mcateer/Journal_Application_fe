@@ -16,46 +16,56 @@ import ShowEntry from './ShowEntry'
 
 function App() {
 
-  // Hard coded categories and entries 
+  // initializses a state variable categories/entries and a function setC/E to update the state. The initial value of each is an empty array [].
   const [categories, setCategories] = useState([])
   const [entries, setEntries] = useState([])
 
-  
-
-
+  // useEffect is being used to perform data fetching when the component mounts for the first time (due to the empty dependency array [])
   useEffect(() => {
     fetch('http://localhost:3001/categories')
+    // converts the response to JSON format using res.json()
     .then(res => res.json())
+    //updating the state variables categories with the fetched data.
     .then(data => setCategories(data))
 
     fetch('http://localhost:3001/entries')
     .then(res => res.json())
+    //updating the state variables entries with the fetched data.
     .then(data => setEntries(data))
 
 
-  }, [])
+  }, []);
 
-  // Function which takes cat_id and content as parameters 
+  // Async function which takes cat_id and content as parameters 
   async function addEntry(cat_id, content) {
+
+    // create id for the new entry equal to the length of the entries array 
     const newId = entries.length
-    // Key value pairs 
+    
+    // create a new entry object which accepts the parameters as values 
     const newEntry = {
       category: categories[cat_id]._id,
       content: content
     }
-    // ...entries leaves the previous array unchanged and adds the newEntry to the end of the array 
     
-
-    const res = await fetch('http://localhost:3001/entries', {
+    // send a post request with the new entry data in the request body. It waits for the response using the await keyword.
+    // without await - res.json() would be called on a Promise object representing the response, rather than the actual response data.
+    const response = await fetch('http://localhost:3001/entries', {
       method: 'POST',
+
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(newEntry)
     })
-    const data = await res.json()
+
+    // This line parses the JSON response from the server and stores it in the data variable.
+    // Without await - data would be assigned a pending Promise object rather than the actual JSON data returned by the server.
+    const data = await response.json()
+    // ...entries leaves the previous array unchanged and adds the data to the end of the array
     setEntries([...entries, data])
-    // 2. Add new entry to the entries list
+
+    // the function returns the newId, which represents the index of the newly added entry in the entries array.
     return newId
   }
 
