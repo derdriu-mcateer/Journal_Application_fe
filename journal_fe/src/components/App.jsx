@@ -12,6 +12,7 @@ import NewEntry from './NewEntry'
 import CategorySelection from './CategorySelection'
 import NavBar from './NavBar'
 import ShowEntry from './ShowEntry'
+import UpdatedEntry from './UpdatedEntry'
 
 
 function App() {
@@ -23,15 +24,15 @@ function App() {
   // useEffect is being used to perform data fetching when the component mounts for the first time (due to the empty dependency array [])
   useEffect(() => {
     fetch('http://localhost:3001/categories')
-    // converts the response to JSON format using res.json()
-    .then(res => res.json())
-    //updating the state variables categories with the fetched data.
-    .then(data => setCategories(data))
+      // converts the response to JSON format using res.json()
+      .then(res => res.json())
+      //updating the state variables categories with the fetched data.
+      .then(data => setCategories(data))
 
     fetch('http://localhost:3001/entries')
-    .then(res => res.json())
-    //updating the state variables entries with the fetched data.
-    .then(data => setEntries(data))
+      .then(res => res.json())
+      //updating the state variables entries with the fetched data.
+      .then(data => setEntries(data))
 
 
   }, []);
@@ -41,13 +42,13 @@ function App() {
 
     // create id for the new entry equal to the length of the entries array 
     const newId = entries.length
-    
+
     // create a new entry object which accepts the parameters as values 
     const newEntry = {
       category: categories[cat_id]._id,
       content: content
     }
-    
+
     // send a post request with the new entry data in the request body. It waits for the response using the await keyword.
     // without await - res.json() would be called on a Promise object representing the response, rather than the actual response data.
     const response = await fetch('http://localhost:3001/entries', {
@@ -69,39 +70,94 @@ function App() {
     return newId
   }
 
+  async function deleteEntry(id) {
+    try {
+        const response = await fetch(`http://localhost:3001/entries/${id}`, {
+            method: 'DELETE',
+        });
 
-  // Higher Order Component
-  function ShowEntryWrapper() {
-    // useParams hook to get the id from the URL (/:id)
-    const { id } = useParams()
-
-    return (
-      // Wanting to access entires from the App parent component 
-      // Display the entry where the id in the url matched the entry id 
-      <ShowEntry entry={entries[id]} />
-    )
-
-  }
-
-  return (
-    <>
-      <Router>
-        <NavBar />
-        <Routes>
-          {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
-          <Route path="/" element={<Home entries={entries}/>} />
-          {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
-          <Route path="/category" element={<CategorySelection categories={categories} />} />
-          <Route path="/entry" element={<Outlet />}>
-            <Route path=":id" element={<ShowEntryWrapper />} />
-            <Route path="new/:cat_id" element={<NewEntry categories={categories} addEntry={addEntry} />} />
-          </Route>
-          <Route path="*" element={<h1>ERROR PAGE NOT FOUND</h1>} />
-        </Routes>
-      </Router>
-
-    </>
-  )
+        if (response.ok) {
+            console.log('Entry Deleted');
+            setEntries(entries.filter(entry => entry._id !== id));
+            // Handle any additional actions after successful deletion if needed
+        } else {
+            // Handle the case where deletion fails
+            console.error('Failed to delete entry');
+        }
+    } catch (error) {
+        console.error('Error deleting entry:', error.message);
+    }
 }
 
-export default App
+async function updateEntry(id, newContent) {
+  try {
+    const entryId = entries.findIndex(entry => entry._id === id)
+    const response = await fetch(`http://localhost:3001/entries/${id}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ content: newContent }),
+    });
+
+    if (response.ok) {
+      console.log('Entry Updated');
+      // Optionally, fetch the updated entry from the server and update the entries state
+      // You may need to implement this based on your server's response format
+      // const updatedEntry = await response.json();
+      // setEntries(entries.map(entry => entry._id === id ? updatedEntry : entry));
+      console.log(entryId)
+      return entryId
+    } else {
+      console.error('Failed to update entry');
+    }
+  } catch (error) {
+    console.error('Error updating entry:', error.message);
+  }
+}
+
+
+
+    // Higher Order Component
+    function ShowEntryWrapper() {
+      // useParams hook to get the id from the URL (/:id)
+      const { id } = useParams()
+
+      return (
+        // Wanting to access entires from the App parent component 
+        // Display the entry where the id in the url matched the entry id 
+        <ShowEntry entry={entries[id]} deleteEntry = {deleteEntry}/>
+      )
+    }
+
+    function UpdatedEntryWrapper() {
+      const {id} = useParams()
+
+      return (
+        <UpdatedEntry entry={entries[id]} updateEntry = {updateEntry}/>
+      )
+    }
+
+    return (
+      <>
+        <Router>
+          <NavBar />
+          <Routes>
+            {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
+            <Route path="/" element={<Home entries={entries} />} />
+            {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
+            <Route path="/category" element={<CategorySelection categories={categories} />} />
+            <Route path="/entry" element={<Outlet />}>
+              <Route path=":id" element={<ShowEntryWrapper />} />
+              <Route path="new/:cat_id" element={<NewEntry categories={categories} addEntry={addEntry} />} />
+              <Route path=":id/update" element={<UpdatedEntryWrapper />} />
+            </Route>
+            <Route path="*" element={<h1>ERROR PAGE NOT FOUND</h1>} />
+          </Routes>
+        </Router>
+
+      </>
+    )
+  }
+
+  export default App
