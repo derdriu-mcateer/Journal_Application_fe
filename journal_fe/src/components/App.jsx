@@ -102,10 +102,6 @@ function App() {
 
       if (response.ok) {
         console.log('Entry Updated');
-        // Optionally, fetch the updated entry from the server and update the entries state
-        // You may need to implement this based on your server's response format
-        // const updatedEntry = await response.json();
-        // setEntries(entries.map(entry => entry._id === id ? updatedEntry : entry));
         console.log(entryId)
         // Update the entry in the state
         setEntries(prevEntries => {
