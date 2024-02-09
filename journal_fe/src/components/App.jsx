@@ -72,92 +72,102 @@ function App() {
 
   async function deleteEntry(id) {
     try {
-        const response = await fetch(`http://localhost:3001/entries/${id}`, {
-            method: 'DELETE',
-        });
+      const response = await fetch(`http://localhost:3001/entries/${id}`, {
+        method: 'DELETE',
+      });
 
-        if (response.ok) {
-            console.log('Entry Deleted');
-            setEntries(entries.filter(entry => entry._id !== id));
-            // Handle any additional actions after successful deletion if needed
-        } else {
-            // Handle the case where deletion fails
-            console.error('Failed to delete entry');
-        }
+      if (response.ok) {
+        console.log('Entry Deleted');
+        setEntries(entries.filter(entry => entry._id !== id));
+        // Handle any additional actions after successful deletion if needed
+      } else {
+        // Handle the case where deletion fails
+        console.error('Failed to delete entry');
+      }
     } catch (error) {
-        console.error('Error deleting entry:', error.message);
+      console.error('Error deleting entry:', error.message);
     }
-}
-
-async function updateEntry(id, newContent) {
-  try {
-    const entryId = entries.findIndex(entry => entry._id === id)
-    const response = await fetch(`http://localhost:3001/entries/${id}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ content: newContent }),
-    });
-
-    if (response.ok) {
-      console.log('Entry Updated');
-      // Optionally, fetch the updated entry from the server and update the entries state
-      // You may need to implement this based on your server's response format
-      // const updatedEntry = await response.json();
-      // setEntries(entries.map(entry => entry._id === id ? updatedEntry : entry));
-      console.log(entryId)
-      return entryId
-    } else {
-      console.error('Failed to update entry');
-    }
-  } catch (error) {
-    console.error('Error updating entry:', error.message);
   }
-}
 
+  async function updateEntry(id, newContent) {
+    try {
+      const entryId = entries.findIndex(entry => entry._id === id)
+      const response = await fetch(`http://localhost:3001/entries/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: newContent }),
+      });
 
-
-    // Higher Order Component
-    function ShowEntryWrapper() {
-      // useParams hook to get the id from the URL (/:id)
-      const { id } = useParams()
-
-      return (
-        // Wanting to access entires from the App parent component 
-        // Display the entry where the id in the url matched the entry id 
-        <ShowEntry entry={entries[id]} deleteEntry = {deleteEntry}/>
-      )
+      if (response.ok) {
+        console.log('Entry Updated');
+        // Optionally, fetch the updated entry from the server and update the entries state
+        // You may need to implement this based on your server's response format
+        // const updatedEntry = await response.json();
+        // setEntries(entries.map(entry => entry._id === id ? updatedEntry : entry));
+        console.log(entryId)
+        // Update the entry in the state
+        setEntries(prevEntries => {
+          return prevEntries.map(entry => {
+            if (entry._id === id) {
+              // If this is the updated entry, update its content
+              return { ...entry, content: newContent };
+            }
+            return entry;
+          });
+        });
+        return entryId
+      } else {
+        console.error('Failed to update entry');
+      }
+    } catch (error) {
+      console.error('Error updating entry:', error.message);
     }
+  }
 
-    function UpdatedEntryWrapper() {
-      const {id} = useParams()
 
-      return (
-        <UpdatedEntry entry={entries[id]} updateEntry = {updateEntry}/>
-      )
-    }
+
+  // Higher Order Component
+  function ShowEntryWrapper() {
+    // useParams hook to get the id from the URL (/:id)
+    const { id } = useParams()
 
     return (
-      <>
-        <Router>
-          <NavBar />
-          <Routes>
-            {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
-            <Route path="/" element={<Home entries={entries} />} />
-            {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
-            <Route path="/category" element={<CategorySelection categories={categories} />} />
-            <Route path="/entry" element={<Outlet />}>
-              <Route path=":id" element={<ShowEntryWrapper />} />
-              <Route path="new/:cat_id" element={<NewEntry categories={categories} addEntry={addEntry} />} />
-              <Route path=":id/update" element={<UpdatedEntryWrapper />} />
-            </Route>
-            <Route path="*" element={<h1>ERROR PAGE NOT FOUND</h1>} />
-          </Routes>
-        </Router>
-
-      </>
+      // Wanting to access entires from the App parent component 
+      // Display the entry where the id in the url matched the entry id 
+      <ShowEntry entry={entries[id]} deleteEntry={deleteEntry} />
     )
   }
 
-  export default App
+  function UpdatedEntryWrapper() {
+    const { id } = useParams()
+
+    return (
+      <UpdatedEntry entry={entries[id]} updateEntry={updateEntry} />
+    )
+  }
+
+  return (
+    <>
+      <Router>
+        <NavBar />
+        <Routes>
+          {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
+          <Route path="/" element={<Home entries={entries} />} />
+          {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
+          <Route path="/category" element={<CategorySelection categories={categories} />} />
+          <Route path="/entry" element={<Outlet />}>
+            <Route path=":id" element={<ShowEntryWrapper />} />
+            <Route path="new/:cat_id" element={<NewEntry categories={categories} addEntry={addEntry} />} />
+            <Route path=":id/update" element={<UpdatedEntryWrapper />} />
+          </Route>
+          <Route path="*" element={<h1>ERROR PAGE NOT FOUND</h1>} />
+        </Routes>
+      </Router>
+
+    </>
+  )
+}
+
+export default App
