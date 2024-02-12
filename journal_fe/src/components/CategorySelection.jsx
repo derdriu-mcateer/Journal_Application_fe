@@ -15,7 +15,7 @@ const CategorySelection = ({categories, addCategory}) => {
   return (
     <div className="category-container">
       <h3 className="text-center display-4"> Please Select a Category</h3>
-      <ul className="list-group list-group-horizontal">
+      <ul className="d-flex flex-column list-group list-group-horizontal">
         {categories.map((item, index) => (
           <li key={index} className="list-group-item list-group-item-info">
             <Link to={`/entry/new/${index}`}>{item.name}</Link>
@@ -29,7 +29,7 @@ const CategorySelection = ({categories, addCategory}) => {
           onChange={e => setInputValue(e.target.value)}
           placeholder="New Category Name"
         />
-        <button type="submit">Add</button>
+        <button className="btn btn-info m-2"type="submit">Add</button>
       </form></li>
       </ul>
     </div>
