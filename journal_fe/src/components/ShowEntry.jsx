@@ -25,7 +25,7 @@ const ShowEntry = ({entry, deleteEntry}) => {
                     <p className="card-text">{entry.category.name}</p>
                     <CategoryImage category={entry.category.name} />
                     <button type="button" className="btn btn-danger" onClick={() =>{handleDelete()}}>Delete</button>
-                    <button><Link to={`/entry/${id}/update`}>Update</Link></button>
+                    <button className="btn btn-info "><Link to={`/entry/${id}/update`}>Update</Link></button>
                 </div>
             </div>
         </>
