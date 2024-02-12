@@ -74,18 +74,18 @@ function App() {
     try {
       const response = await fetch(`http://localhost:3001/entries/${id}`, {
         method: 'DELETE',
-      });
+      })
 
       if (response.ok) {
-        console.log('Entry Deleted');
-        setEntries(entries.filter(entry => entry._id !== id));
+        console.log('Entry Deleted')
+        setEntries(entries.filter(entry => entry._id !== id))
         // Handle any additional actions after successful deletion if needed
       } else {
         // Handle the case where deletion fails
-        console.error('Failed to delete entry');
+        console.error('Failed to delete entry')
       }
     } catch (error) {
-      console.error('Error deleting entry:', error.message);
+      console.error('Error deleting entry:', error.message)
     }
   }
 
@@ -98,29 +98,56 @@ function App() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ content: newContent }),
-      });
+      })
 
       if (response.ok) {
-        console.log('Entry Updated');
+        console.log('Entry Updated')
         console.log(entryId)
         // Update the entry in the state
         setEntries(prevEntries => {
           return prevEntries.map(entry => {
             if (entry._id === id) {
               // If this is the updated entry, update its content
-              return { ...entry, content: newContent };
+              return { ...entry, content: newContent }
             }
-            return entry;
-          });
-        });
+            return entry
+          })
+        })
         return entryId
       } else {
-        console.error('Failed to update entry');
+        console.error('Failed to update entry')
       }
     } catch (error) {
-      console.error('Error updating entry:', error.message);
+      console.error('Error updating entry:', error.message)
     }
   }
+
+  async function addCategory(name) {
+    const idNew = categories.length
+    const newCategory = {
+        name: name,
+    }
+
+    const response = await fetch('http://localhost:3001/categories', {
+      method: 'POST',
+
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(newCategory)
+    })
+    const data = await response.json()
+    // ...entries leaves the previous array unchanged and adds the data to the end of the array
+    setCategories([...categories, data])
+
+    return idNew
+}
+  function UpdatedCategoryWrapper() {
+    return (
+      <CategorySelection categories={categories} addCategory={addCategory} />
+    )
+  }
+
 
 
 
@@ -152,7 +179,7 @@ function App() {
           {/* Path prop specified the URL path pattern that should be matched for the route. When the current URL matches the path the associated elemnt will be rendered  */}
           <Route path="/" element={<Home entries={entries} />} />
           {/* The element prop is used to specify the React component (element) that should be rendered on a path match  */}
-          <Route path="/category" element={<CategorySelection categories={categories} />} />
+          <Route path="/category" element={<UpdatedCategoryWrapper/>} />
           <Route path="/entry" element={<Outlet />}>
             <Route path=":id" element={<ShowEntryWrapper />} />
             <Route path="new/:cat_id" element={<NewEntry categories={categories} addEntry={addEntry} />} />

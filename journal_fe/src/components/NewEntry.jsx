@@ -20,7 +20,7 @@ const NewEntry = ({ categories, addEntry}) => {
   return (
     <div className="newEntry-container">
 
-      <h3>New Entry</h3>
+      <h3 className="text-center display-4">New Entry</h3>
       {/* Get categories from props and then uses the index provided from the URL and the gets name from the category object*/}
       <h4>Category: {categories[cat_id].name}</h4>
       

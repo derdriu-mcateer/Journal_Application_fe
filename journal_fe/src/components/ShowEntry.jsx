@@ -1,4 +1,4 @@
-import CategoryImage from './image';
+import CategoryImage from './image'
 import {Link, useNavigate, useParams } from 'react-router-dom'
 
 // Entry accessed from ShowEntryWrapper function in App
@@ -8,11 +8,11 @@ const ShowEntry = ({entry, deleteEntry}) => {
 
     const handleDelete = async () => {
         try {
-            await deleteEntry(entry._id);
-            console.log('Entry deleted');
-            nav('/');
+            await deleteEntry(entry._id)
+            console.log('Entry deleted')
+            nav('/')
         } catch (error) {
-            console.error('Error deleting entry:', error.message);
+            console.error('Error deleting entry:', error.message)
         }
     }
 
@@ -30,7 +30,7 @@ const ShowEntry = ({entry, deleteEntry}) => {
             </div>
         </>
   ) : (
-    <h3>Entry not found</h3>
+    <h3 className="text-center display-4">Entry not found</h3>
   )
 }
 

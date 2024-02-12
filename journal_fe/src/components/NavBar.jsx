@@ -1,16 +1,16 @@
-import { useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useRef } from 'react'
+import { Link } from 'react-router-dom'
 
 const NavBar = () => {
-  const navBarRef = useRef();
+  const navBarRef = useRef()
 
   function toggleHamburger() {
     // Toggle the 'is-active' class on the button
-    const button = document.querySelector('.navbar-toggler');
-    button.classList.toggle('is-active');
+    const button = document.querySelector('.navbar-toggler')
+    button.classList.toggle('is-active')
 
     // Toggle the 'is-active' class on the navbar
-    navBarRef.current.classList.toggle('is-active');
+    navBarRef.current.classList.toggle('is-active')
   }
 
   return (
@@ -48,7 +48,7 @@ const NavBar = () => {
         </div>
       </div>
     </nav>
-  );
-};
+  )
+}
 
-export default NavBar;
+export default NavBar
