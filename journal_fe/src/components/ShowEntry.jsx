@@ -1,10 +1,10 @@
 import CategoryImage from './image'
-import {Link, useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 
 // Entry accessed from ShowEntryWrapper function in App
-const ShowEntry = ({entry, deleteEntry}) => {
+const ShowEntry = ({ entry, deleteEntry }) => {
     const nav = useNavigate()
-    const {id} = useParams()
+    const { id } = useParams()
 
     const handleDelete = async () => {
         try {
@@ -23,15 +23,19 @@ const ShowEntry = ({entry, deleteEntry}) => {
                 <div className="card-body">
                     <h5 className="card-title">{entry.content}</h5>
                     <p className="card-text">{entry.category.name}</p>
-                    <CategoryImage category={entry.category.name} />
-                    <button type="button" className="btn btn-danger" onClick={() =>{handleDelete()}}>Delete</button>
-                    <button className="btn btn-info "><Link to={`/entry/${id}/update`}>Update</Link></button>
+                    <div className="d-flex justify-content-evenly align-items-center">
+                        <CategoryImage category={entry.category.name} />
+                    </div>
+                    <div className="d-flex justify-content-evenly align-items-center mt-3">
+                        <button type="button" className="btn btn-danger" onClick={handleDelete}>Delete</button>
+                        <Link to={`/entry/${id}/update`} className="btn btn-info">Update</Link>
+                    </div>
                 </div>
             </div>
         </>
-  ) : (
-    <h3 className="text-center display-4">Entry not found</h3>
-  )
+    ) : (
+        <h3 className="text-center display-4">Entry not found</h3>
+    )
 }
 
 export default ShowEntry

@@ -49,4 +49,8 @@ a:-webkit-any-link{
     height: auto; 
     object-fit: cover; 
   }
-  
+
+  #exampleFormControlTextarea1{
+    height: 200px;
+    width: 400px;
+  }

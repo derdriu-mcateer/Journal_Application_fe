@@ -21,17 +21,19 @@ const UpdatedEntry = ({ entry, updateEntry }) => {
 
 
     return (
-        <div>
+        <div className="d-flex flex-column justify-content-evenly align-items-center m-3">
+            <h3 className="text-center display-4 mb-3">Update Entry</h3>
             <form onSubmit={updateContent}>
                 <textarea className="form-control" id="exampleFormControlTextarea1" placeholder='Update content here'
                     // any changes into the form will be stored into the inputValue
                     value={inputValue} onChange={e => setInputValue(e.target.value)}>
                 </textarea>
-                <button type="submit" className="btn btn-info" id="entry-button"> Submit</button>
-
-                <button className="btn btn-info m-4">
-                    <Link to={`/entry/${entry._id}`}>Go Back</Link>
-                </button>
+                <div className="d-flex justify-content-evenly align-items-center mt-3">
+                    <button type="submit" className="btn btn-info" id="entry-button"> Submit</button>
+                    <button className="btn btn-info m-4">
+                        <Link to={`/entry/${entry._id}`}>Go Back</Link>
+                    </button>
+                </div>
             </form>
         </div>
 
