@@ -11,23 +11,54 @@ describe('App Test', () => {
         expect(res.body.info).toBe('Journal API')
     })
 
-    test('POST /entries', async () => {
-        const cats = await request(app).get('/categories')
-        const res = await request(app).post('/entries').send({
-            category: cats.body[0]._id,
-            content: 'Jest test content'
+    describe('POST /entries', () => {
+        let cats, res
+
+        beforeAll(async () => {
+            cats = await request(app).get('/categories')
+            res = await request(app).post('/entries').send({
+                category: cats.body[0]._id,
+                content: 'Jest test content'
+            })
         })
 
-        expect(res.status).toBe(201)
-        expect(res.header['content-type']).toContain('json')
+            test('Returns JSON with 201', async () => {
+                expect(res.status).toBe(201)
+                expect(res.header['content-type']).toContain('json')
+            })
 
-        request(app).delete(`/entires/${res.body._id}`)
+            test('Body has _id, category and content fields', async () => {
+                expect(res.body._id).toBeDefined()
+                expect(res.body.category).toBeDefined()
+                expect(res.body.content).toBeDefined()
+                
+            })
+            test('Category is an object with an id and name field', async () => {
+                expect(res.body.category).toBeInstanceOf(Object)
+                expect(res.body.category._id).toBeDefined()
+                expect(res.body.category.name).toBeDefined()
+
+            })
+
+            test('Category has correct id and content', async () => {
+                expect(res.body.category._id).toBe(cats.body[0]._id)
+                expect(res.body.content).toBe('Jest test content')
+                
+            })
+
+            afterAll(() => {
+                request(app).delete(`/entires/${res.body._id}`)
+            })
+
+
+        })
+        
     })
 
     describe('GET / categories', () => {
-        let res 
+        let res
 
-        beforeEach(async () => {
+        beforeAll(async () => {
             res = await request(app).get('/categories')
         })
 
@@ -47,6 +78,3 @@ describe('App Test', () => {
             expect(res.body).toEqual(expect.arrayContaining([expect.objectContaining({ name: "Gaming" })]))
         })
     })
-
-
-})
