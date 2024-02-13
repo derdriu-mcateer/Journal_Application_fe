@@ -23,13 +23,13 @@ function App() {
 
   // useEffect is being used to perform data fetching when the component mounts for the first time (due to the empty dependency array [])
   useEffect(() => {
-    fetch('http://localhost:3001/categories')
+    fetch('https://journal-api-production.onrender.com/categories')
       // converts the response to JSON format using res.json()
       .then(res => res.json())
       //updating the state variables categories with the fetched data.
       .then(data => setCategories(data))
 
-    fetch('http://localhost:3001/entries')
+    fetch('https://journal-api-production.onrender.com/entries')
       .then(res => res.json())
       //updating the state variables entries with the fetched data.
       .then(data => setEntries(data))
@@ -51,7 +51,7 @@ function App() {
 
     // send a post request with the new entry data in the request body. It waits for the response using the await keyword.
     // without await - res.json() would be called on a Promise object representing the response, rather than the actual response data.
-    const response = await fetch('http://localhost:3001/entries', {
+    const response = await fetch('https://journal-api-production.onrender.com/entries', {
       method: 'POST',
 
       headers: {
@@ -72,7 +72,7 @@ function App() {
 
   async function deleteEntry(id) {
     try {
-      const response = await fetch(`http://localhost:3001/entries/${id}`, {
+      const response = await fetch(`https://journal-api-production.onrender.com/entries/${id}`, {
         method: 'DELETE',
       })
 
@@ -92,7 +92,7 @@ function App() {
   async function updateEntry(id, newContent) {
     try {
       const entryId = entries.findIndex(entry => entry._id === id)
-      const response = await fetch(`http://localhost:3001/entries/${id}`, {
+      const response = await fetch(`https://journal-api-production.onrender.com/entries/${id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ function App() {
         name: name,
     }
 
-    const response = await fetch('http://localhost:3001/categories', {
+    const response = await fetch('https://journal-api-production.onrender.com/categories', {
       method: 'POST',
 
       headers: {
