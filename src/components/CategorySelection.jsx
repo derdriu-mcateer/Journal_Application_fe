@@ -1,8 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link } from "react-router-dom"
+import { journalContext } from '../reducer'
 
-const CategorySelection = ({categories, addCategory}) => {
+const CategorySelection = ({addCategory}) => {
 
+  const state = useContext(journalContext)
+  const {categories} = state
+
+  
   const [inputValue, setInputValue] = useState('')
 
   async function createCategory(e) {

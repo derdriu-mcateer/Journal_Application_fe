@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import CategoryImage from './image'
+import { journalContext } from '../reducer'
 
-const Home = ({ entries }) => {
+const Home = () => {
+  const state = useContext(journalContext)
+
 
   return (
     <>
       <h3 className="text-center display-4">Journal Entries</h3>
       <div className="row justify-content-center">
-        {entries.map((entry, index) => (
+        {state.entries.map((entry, index) => (
           <div className="card text-bg-dark col-md-4 mb-3" id="entry-card" key={index}>
             <div className="card-header text-center">Entry</div>
             <div className="card-body">

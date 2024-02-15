@@ -1,10 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
+import { journalContext } from '../reducer'
 
-const NewEntry = ({ categories, addEntry}) => {
+const NewEntry = ({addEntry}) => {
   const { cat_id } = useParams()
   const [inputValue, setInputValue] = useState('')
   const nav = useNavigate()
+  const state = useContext(journalContext)
+  const {categories} = state
 
   async function createEntry(e) {
     e.preventDefault()
