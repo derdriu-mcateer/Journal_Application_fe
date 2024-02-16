@@ -1,8 +1,18 @@
-# React + Vite
+# Journal Application 
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Introduction 
+This Journal application was created as part of a learning project with Coder Academy. It was an opportunity to learn:
+- MongoDB and Mongoose
+- Node.js and Express.JS
+- React and Vite 
+- Bootstrap 
+- Vitest and Testing-Library 
+- Supertest 
+- Front end deployment with Netlify 
+- Back end deployment with Render
+- Database deployment with Mongo Atlas 
 
-Currently, two official plugins are available:
+### Links 
+[Frontend Deployment](https://roaring-moonbeam-e9c4af.netlify.app/) 
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[Backend Deployment](https://journal-api-production.onrender.com/)
