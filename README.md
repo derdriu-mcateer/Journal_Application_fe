@@ -17,4 +17,4 @@ This Journal application was created as part of a learning project with Coder Ac
 
 [Backend Deployment](https://journal-api-production.onrender.com/)
 
-[Frontend Repo](https://github.com/derdriu-mcateer/Journal_API_backend)
+[Backend Repo](https://github.com/derdriu-mcateer/Journal_API_backend)
